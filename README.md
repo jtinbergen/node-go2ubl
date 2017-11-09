@@ -44,9 +44,10 @@ go2ubl.initialize(credentials);
 ```
 // ... initialize your library, see above ...
 await go2ubl.uploadDocument({
-    documentId,
+    externalId,
+    filename: 'document.pdf',
     chamberOfCommerceId: KVK,
-    document: fs.readFileSync('document.pdf')
+    document: fs.readFileSync('document.pdf').toJSON().data
 });
 
 const update = async () => {
