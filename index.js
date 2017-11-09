@@ -150,13 +150,13 @@ const getCompanyWhitelist = async (chamberOfCommerceId) => {
 /**
  * Upload a document to Go2UBL for conversion to an UBL.
  */
-const uploadDocument = async ({ documentId, chamberOfCommerceId, document }) => {
+const uploadDocument = async ({ externalId, filename, chamberOfCommerceId, document }) => {
     return await postToGo2Ubl({
         url: `${DOCUMENT_API}/PurchaseStandard/PutDocument`,
         data: {
             KvkNumber: chamberOfCommerceId,
-            ExternalId: documentId,
-            FileName: documentId + '.pdf',
+            ExternalId: externalId,
+            FileName: filename || externalId,
             Content: document
         } 
     })
