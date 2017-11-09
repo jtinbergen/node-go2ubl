@@ -63,9 +63,10 @@ const update = async () => {
     const documentsStillToBeDelivered = await go2ubl.getDocumentsStillToBeDelivered();
     console.log(`${documentsStillToBeDelivered.Results.length} are being delivered.`);
     const processedDocuments = await go2ubl.getReadyDocuments();
-    console.log(`${documentsStillToBeDelivered.Results.length} are ready.`);
+    console.log(`${processedDocuments.Results.length} are ready.`);
     const declinedDocuments = await go2ubl.getFailedDocuments();
-    console.log(`${documentsStillToBeDelivered.Results.length} have failed.`);
+    console.log(`${declinedDocuments.Results.length} have failed.`);
+
     setTimeout(update, 5000);
 }
 

@@ -37,13 +37,14 @@ const standardPost = async(url, data) => postToGo2Ubl({
  * @param {*} credentials 
  */
 const initialize = ({
-    companyApi = 'http://go2ublv2-acc.azurewebsites.net/api/request',
-    companyApi = 'http://go2ublv2-acc.azurewebsites.net/api/v1',
+    companyApi = 'https://secure.go2ubl.nl/api/request',
+    documentApi = 'https://secure.go2ubl.nl/api/v1',
     code,
     identifier,
     token
 }) => {
     COMPANY_API = companyApi;
+    DOCUMENT_API = documentApi;
     credentials.code = code;
     credentials.identifier = identifier;
     credentials.token = token;
