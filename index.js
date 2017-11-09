@@ -1,7 +1,7 @@
 const request = require('superagent');
 
-const COMPANY_API = null;
-const DOCUMENT_API = null;
+let COMPANY_API = null;
+let DOCUMENT_API = null;
 
 /**
  * @private
