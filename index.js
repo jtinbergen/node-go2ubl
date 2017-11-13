@@ -4,6 +4,47 @@ let COMPANY_API = null;
 let DOCUMENT_API = null;
 const credentials = {};
 
+const StatusDetail = {
+  None: 1,
+  ReceivedByMail: 100,
+  ReceivedByWebservice: 110,
+  RecievedByAPP: 120,
+  ReceivedInADifferentWay: 190,
+  ReadyForClassifyDocument: 300,
+  ClassifyingDocument: 310,
+  ReadyForDataEntry: 400,
+  DataEntryProcessing: 430,
+  DataEntryProcessingCheckup: 440,
+  DataEntryProcessingAdvanced: 460,
+  DataEntryProcessingAdvancedCheckup: 470,
+  Approved: 700,
+  ToDeliverChecksApproved: 710,
+  NonUniversalBusinessLanguageDocument: 740,
+  ToDeliverChecksNonUbl: 750,
+  Declined: 780,
+  ToDeliverChecksDeclined: 790,
+  ReadyToSend: 800,
+  Sent: 820,
+  Invoiced: 900,
+  Ready: 1000,
+};
+
+const DeclinedReason = {
+  Duplicate: 1,
+  Unqualified: 2,
+  Unreadable: 3,
+  Untrusted: 4,
+  UblInvalid: 5,
+  ImageInvalid: 6,
+  NoProcurementDocument: 10001,
+  MultipleProcurementDocuments: 10002,
+  MatchingKvkNumbers: 10004,
+  UnsupportedWordAndExcelFiles: 10005,
+  InvalidImageAttachment: 10006,
+  NoSaleDocument: 10007,
+  MultipleSaleDocuments: 10008,
+};
+
 /**
  * @private
  */
@@ -203,4 +244,6 @@ module.exports = {
   getDocumentsStillToBeDelivered,
   getReadyDocuments,
   getFailedDocuments,
+  StatusDetail,
+  DeclinedReason,
 };
