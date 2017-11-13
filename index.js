@@ -140,7 +140,7 @@ const getCompanyWhitelist = async chamberOfCommerceId => postToGo2Ubl({
 });
 
 /**
- * Upload a document to Go2UBL for conversion to an UBL.
+ * Upload a document to go2UBL for conversion to an UBL.
  */
 const uploadDocument = async ({ externalId, filename, chamberOfCommerceId, document }) => postToGo2Ubl({
   url: `${DOCUMENT_API}/PurchaseStandard/PutDocument`,

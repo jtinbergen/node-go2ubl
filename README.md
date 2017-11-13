@@ -1,6 +1,6 @@
-# node-go2ubl
+# node-go2UBL
 
-Node library to use the Go2UBL API. Allows you to:
+Node library to use the go2UBL API. Allows you to:
 
 * Add companies to your account
 * Enable companies in your account
@@ -8,13 +8,13 @@ Node library to use the Go2UBL API. Allows you to:
 * Get a company's whitelist with accepted email addresses
 * Add an email address to a company's whitelist
 * Remove an email address from a company's whitelist
-* Send a document to Go2UBL to convert to an UBL 2 xml
+* Send a document to go2UBL to convert to an UBL 2 xml
 * Track a document's status
 * Get the errors or UBL for a sent document
 
 ## Please note
 
-This is not in any way associated with Go2UBL. Use at your own risk. Please see the license at the bottom of this README.
+This is not in any way associated with go2UBL. Use at your own risk. Please see the license at the bottom of this README.
 
 ## How to install
 
@@ -23,27 +23,27 @@ npm install node-go2ubl --save
 ```
 
 
-## Before you can call the Go2UBL API
+## Before you can call the go2UBL API
 
-You will need to aquire your API credentials from Go2UBl. After this you can initialize the library as follows:
+You will need to aquire your API credentials from go2UBL. After this you can initialize the library as follows:
 
 ```
-const go2ubl = require('node-go2ubl');
+const go2UBL = require('node-go2ubl');
 
 const credentials = {
-    identifier: 'Get these from Go2UBL...',
-    code: 'Get these from Go2UBL...',
-    token: 'Get these from Go2UBL...',
+    identifier: 'Get these from go2UBL...',
+    code: 'Get these from go2UBL...',
+    token: 'Get these from go2UBL...',
 };
 
-go2ubl.initialize(credentials);
+go2UBL.initialize(credentials);
 ```
 
 ## Sending and tracking a document for conversion to UBL
 
 ```
 // ... initialize your library, see above ...
-await go2ubl.uploadDocument({
+await go2UBL.uploadDocument({
     externalId,
     filename: 'document.pdf',
     chamberOfCommerceId: KVK,
@@ -51,21 +51,21 @@ await go2ubl.uploadDocument({
 });
 
 const update = async () => {
-    const documentResponse = await go2ubl.getDocumentsWithChangedStatus();
+    const documentResponse = await go2UBL.getDocumentsWithChangedStatus();
     if (documentResponse.Success) {
         for (let document of documentResponse.Results) {
-            const response = await go2ubl.getDocument(document.DocumentGuid);
+            const response = await go2UBL.getDocument(document.DocumentGuid);
             console.log(response.Result);
         }
     }
 
-    const documentsStillToBeProcessed = await go2ubl.getDocumentsStillToBeProcessed();
+    const documentsStillToBeProcessed = await go2UBL.getDocumentsStillToBeProcessed();
     console.log(`${documentsStillToBeProcessed.Results.length} are waiting to be processed.`);
-    const documentsStillToBeDelivered = await go2ubl.getDocumentsStillToBeDelivered();
+    const documentsStillToBeDelivered = await go2UBL.getDocumentsStillToBeDelivered();
     console.log(`${documentsStillToBeDelivered.Results.length} are being delivered.`);
-    const processedDocuments = await go2ubl.getReadyDocuments();
+    const processedDocuments = await go2UBL.getReadyDocuments();
     console.log(`${processedDocuments.Results.length} are ready.`);
-    const declinedDocuments = await go2ubl.getFailedDocuments();
+    const declinedDocuments = await go2UBL.getFailedDocuments();
     console.log(`${declinedDocuments.Results.length} have failed.`);
 
     setTimeout(update, 5000);
@@ -78,12 +78,12 @@ setTimeout(update, 5000);
 
 ```
 const chamberOfCommerce = '12345678';
-console.log(await go2ubl.addCompany(chamberOfCommerce, [], 'info@example.nl'));
-console.log(await go2ubl.disableCompany(chamberOfCommerce));
-console.log(await go2ubl.enableCompany(chamberOfCommerce));
-console.log(await go2ubl.addEmailToCompanyWhitelist(chamberOfCommerce, 'postmaster@example.nl'));
-console.log(await go2ubl.getCompany(chamberOfCommerce));
-console.log(await go2ubl.deleteEmailFromCompanyWhitelist(chamberOfCommerce, 'postmaster@example.nl'));
+console.log(await go2UBL.addCompany(chamberOfCommerce, [], 'info@example.nl'));
+console.log(await go2UBL.disableCompany(chamberOfCommerce));
+console.log(await go2UBL.enableCompany(chamberOfCommerce));
+console.log(await go2UBL.addEmailToCompanyWhitelist(chamberOfCommerce, 'postmaster@example.nl'));
+console.log(await go2UBL.getCompany(chamberOfCommerce));
+console.log(await go2UBL.deleteEmailFromCompanyWhitelist(chamberOfCommerce, 'postmaster@example.nl'));
 ```
 
 ## LICENSE
