@@ -58,7 +58,7 @@ const postToGo2Ubl = async ({ url, data }) => new Promise((resolve, reject) => {
         .set('Accept', 'application/json')
         .end((err, res) => {
           if (err || !res.ok) {
-            reject();
+            reject(err || res.ok);
           } else {
             resolve(res.body);
           }
