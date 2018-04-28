@@ -195,7 +195,7 @@ const getCompanyWhitelist = async chamberOfCommerceId => postToGo2Ubl({
  * Upload a document to go2UBL for conversion to an UBL.
  */
 const uploadDocument = async ({
-  type, externalId, filename, chamberOfCommerceId, document,
+  type = 'purchase', externalId, filename, chamberOfCommerceId, document,
 }) => {
   const validDocumentTypes = ['sale', 'logistic', 'purchase'];
   if (!validDocumentTypes.includes(type)) {
@@ -204,11 +204,11 @@ const uploadDocument = async ({
 
   let url = `${DOCUMENT_API}/PurchaseStandard/PutDocument`;
   if (type === 'sale') {
-    url = `${CONVERT_API}/api/v1/SaleStandard/PutDocument`;
+    url = `${CONVERT_API}/SaleStandard/PutDocument`;
   }
 
   if (type === 'logistic') {
-    url = `${LOGISTICS_API}/api/v1/PurchaseLogistic/PutDocument`;
+    url = `${LOGISTICS_API}/PurchaseLogistic/PutDocument`;
   }
 
   return postToGo2Ubl({
