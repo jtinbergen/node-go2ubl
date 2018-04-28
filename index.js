@@ -2,6 +2,9 @@ const request = require('superagent');
 
 let COMPANY_API = null;
 let DOCUMENT_API = null;
+let LOGISTICS_API = null;
+let CONVERT_API = null;
+
 const credentials = {};
 
 const StatusDetail = {
@@ -50,19 +53,19 @@ const DeclinedReason = {
  */
 const postToGo2Ubl = async ({ url, data }) => new Promise((resolve, reject) => {
   request
-        .post(url)
-        .send(data)
-        .set('identifier', credentials.identifier)
-        .set('code', credentials.code)
-        .set('token', credentials.token)
-        .set('Accept', 'application/json')
-        .end((err, res) => {
-          if (err || !res.ok) {
-            reject(err || res.ok);
-          } else {
-            resolve(res.body);
-          }
-        });
+    .post(url)
+    .send(data)
+    .set('identifier', credentials.identifier)
+    .set('code', credentials.code)
+    .set('token', credentials.token)
+    .set('Accept', 'application/json')
+    .end((err, res) => {
+      if (err || !res.ok) {
+        reject(err || res.ok);
+      } else {
+        resolve(res.body);
+      }
+    });
 });
 
 /**
@@ -79,14 +82,18 @@ const standardPost = async (url, data) => postToGo2Ubl({
  * @param {*} credentials
  */
 const initialize = ({
-    companyApi = 'https://secure.go2ubl.nl/api/request',
-    documentApi = 'https://secure.go2ubl.nl/api/v1',
-    code,
-    identifier,
-    token,
+  companyApi = 'https://secure.go2ubl.nl/api/request',
+  documentApi = 'https://secure.go2ubl.nl/api/v1',
+  logisticsApi = 'https://secure.logistics2ubl.nl',
+  convertApi = 'https://secure.convert2ubl.nl',
+  code,
+  identifier,
+  token,
 }) => {
   COMPANY_API = companyApi;
   DOCUMENT_API = documentApi;
+  LOGISTICS_API = logisticsApi;
+  CONVERT_API = convertApi;
   credentials.code = code;
   credentials.identifier = identifier;
   credentials.token = token;
@@ -119,7 +126,8 @@ const enableCompany = async chamberOfCommerceId => postToGo2Ubl({
 });
 
 /**
- * Add a new company using its chamber of commerce identity, its initial whitelist and the default reply email address.
+ * Add a new company using its chamber of commerce identity, its initial
+ * whitelist and the default reply email address.
  */
 const addCompany = async (chamberOfCommerceId, initialEmailWhitelist, replyEmailAddress) => {
   if (!chamberOfCommerceId || !replyEmailAddress) {
@@ -149,7 +157,8 @@ const disableCompany = async chamberOfCommerceId => postToGo2Ubl({
 });
 
 /**
- * Delete an email address from a company using its chamber of commerce identity and the email address to delete.
+ * Delete an email address from a company using its chamber of commerce
+ * identity and the email address to delete.
  */
 const deleteEmailFromCompanyWhitelist = async (chamberOfCommerceId, emailAddressToDelete) => postToGo2Ubl({
   url: `${COMPANY_API}/DeleteWhiteListByKvk`,
@@ -160,7 +169,8 @@ const deleteEmailFromCompanyWhitelist = async (chamberOfCommerceId, emailAddress
 });
 
 /**
- * Add an email address to a company's whitelist using its chamber of commerce identity and the email address to add.
+ * Add an email address to a company's whitelist using its chamber of commerce
+ * identity and the email address to add.
  */
 const addEmailToCompanyWhitelist = async (chamberOfCommerceId, emailAddressToAdd) => postToGo2Ubl({
   url: `${COMPANY_API}/AddWhiteListByKvk`,
@@ -171,7 +181,8 @@ const addEmailToCompanyWhitelist = async (chamberOfCommerceId, emailAddressToAdd
 });
 
 /**
- * Gets the currently whitelisted email addresses for a company using its chamber of commerce identity.
+ * Gets the currently whitelisted email addresses for a company using its
+ * chamber of commerce identity.
  */
 const getCompanyWhitelist = async chamberOfCommerceId => postToGo2Ubl({
   url: `${COMPANY_API}/GetWhiteListByKvk`,
@@ -183,15 +194,33 @@ const getCompanyWhitelist = async chamberOfCommerceId => postToGo2Ubl({
 /**
  * Upload a document to go2UBL for conversion to an UBL.
  */
-const uploadDocument = async ({ externalId, filename, chamberOfCommerceId, document }) => postToGo2Ubl({
-  url: `${DOCUMENT_API}/PurchaseStandard/PutDocument`,
-  data: {
-    KvkNumber: chamberOfCommerceId,
-    ExternalId: externalId,
-    FileName: filename || externalId,
-    Content: document,
-  },
-});
+const uploadDocument = async ({
+  type, externalId, filename, chamberOfCommerceId, document,
+}) => {
+  const validDocumentTypes = ['sale', 'logistic', 'purchase'];
+  if (!validDocumentTypes.includes('type')) {
+    throw new Error(`Invalid type property specified: valid values are ${JSON.stringify(validDocumentTypes)}`);
+  }
+
+  let url = `${DOCUMENT_API}/PurchaseStandard/PutDocument`;
+  if (type === 'sale') {
+    url = `${CONVERT_API}/api/v1/SaleStandard/PutDocument`;
+  }
+
+  if (type === 'logistic') {
+    url = `${LOGISTICS_API}/api/v1/PurchaseLogistic/PutDocument`;
+  }
+
+  return postToGo2Ubl({
+    url,
+    data: {
+      KvkNumber: chamberOfCommerceId,
+      ExternalId: externalId,
+      FileName: filename || externalId,
+      Content: document,
+    },
+  });
+};
 
 /**
  * Get the details about a document using its document identity.

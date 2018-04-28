@@ -42,8 +42,9 @@ go2UBL.initialize(credentials);
 ## Sending and tracking a document for conversion to UBL
 
 ```
-// ... initialize your library, see above ...
+// ... after initializing your library (see above) ...
 await go2UBL.uploadDocument({
+    type: 'purchase', // purchase, sale or logistic
     externalId,
     filename: 'document.pdf',
     chamberOfCommerceId: KVK,
@@ -90,7 +91,7 @@ console.log(await go2UBL.deleteEmailFromCompanyWhitelist(chamberOfCommerce, 'pos
 
 MIT License
 
-Copyright (c) 2017 Jaapjan Tinbergen
+Copyright (c) 2018 Jaapjan Tinbergen
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
