@@ -198,7 +198,7 @@ const uploadDocument = async ({
   type, externalId, filename, chamberOfCommerceId, document,
 }) => {
   const validDocumentTypes = ['sale', 'logistic', 'purchase'];
-  if (!validDocumentTypes.includes('type')) {
+  if (!validDocumentTypes.includes(type)) {
     throw new Error(`Invalid type property specified: valid values are ${JSON.stringify(validDocumentTypes)}`);
   }
 
