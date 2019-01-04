@@ -1,6 +1,12 @@
 # node-go2UBL
 
-Node library to use the go2UBL API. Allows you to:
+#### Node library to use the go2UBL API. Allows you to:
+
+* Send purchase and sale invoices and logistic documents to go2UBL for conversion to UBL format
+* Track a sent document's status during its conversion lifecycle
+* Retrieve all document metadata created during the conversion lifecycle
+
+#### As well as:
 
 * Add companies to your account
 * Enable companies in your account
@@ -8,13 +14,10 @@ Node library to use the go2UBL API. Allows you to:
 * Get a company's whitelist with accepted email addresses
 * Add an email address to a company's whitelist
 * Remove an email address from a company's whitelist
-* Send a document to go2UBL to convert to an UBL 2 xml
-* Track a document's status
-* Get the errors or UBL for a sent document
 
 ## Please note
 
-This is not in any way associated with go2UBL. Use at your own risk. Please see the license at the bottom of this README.
+This library is not in any way associated with go2UBL. Use at your own risk. Please see the license at the bottom of this README.
 
 ## How to install
 
@@ -22,30 +25,33 @@ This is not in any way associated with go2UBL. Use at your own risk. Please see 
 npm install node-go2ubl --save
 ```
 
-
 ## Before you can call the go2UBL API
 
-You will need to aquire your API credentials from go2UBL. After this you can initialize the library as follows:
+You will need to aquire your API credentials from go2UBL. You can do so by contacting them using the following URL: 
+
+[https://www.go2ubl.nl/api](https://www.go2ubl.nl/api)
+
+ After this you can initialize the library as follows:
 
 ```
 const go2UBL = require('node-go2ubl');
 
-const credentials = {
+go2UBL.initialize({
     identifier: 'Get these from go2UBL...',
     code: 'Get these from go2UBL...',
     token: 'Get these from go2UBL...',
-};
-
-go2UBL.initialize(credentials);
+});
 ```
 
-## Sending and tracking a document for conversion to UBL
+## Sending and then tracking a document during its conversion lifecycle
 
 ```
 // ... after initializing your library (see above) ...
+
 await go2UBL.uploadDocument({
     type: 'purchase', // purchase, sale or logistic
-    externalId,
+    includeLines: true, // This is only valid for purchase documents
+    externalId, // Your own tracking identity
     filename: 'document.pdf',
     chamberOfCommerceId: KVK,
     document: fs.readFileSync('document.pdf').toJSON().data
@@ -91,7 +97,7 @@ console.log(await go2UBL.deleteEmailFromCompanyWhitelist(chamberOfCommerce, 'pos
 
 MIT License
 
-Copyright (c) 2018 Jaapjan Tinbergen
+Copyright (c) 2019 Jaapjan Tinbergen
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

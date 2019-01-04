@@ -4,6 +4,7 @@ let COMPANY_API = null;
 let DOCUMENT_API = null;
 let LOGISTICS_API = null;
 let CONVERT_API = null;
+let LINES_API = null;
 
 const credentials = {};
 
@@ -84,8 +85,9 @@ const standardPost = async (url, data) => postToGo2Ubl({
 const initialize = ({
   companyApi = 'https://secure.go2ubl.nl/api/request',
   documentApi = 'https://secure.go2ubl.nl/api/v1',
-  logisticsApi = 'https://secure.logistics2ubl.nl',
-  convertApi = 'https://secure.convert2ubl.nl',
+  logisticsApi = 'https://secure.logistics2ubl.nl/api/v1',
+  convertApi = 'https://secure.convert2ubl.nl/api/v1',
+  linesApi = 'https://secure.lines2ubl.nl/api/v1',
   code,
   identifier,
   token,
@@ -94,6 +96,7 @@ const initialize = ({
   DOCUMENT_API = documentApi;
   LOGISTICS_API = logisticsApi;
   CONVERT_API = convertApi;
+  LINES_API = linesApi;
   credentials.code = code;
   credentials.identifier = identifier;
   credentials.token = token;
@@ -195,7 +198,7 @@ const getCompanyWhitelist = async chamberOfCommerceId => postToGo2Ubl({
  * Upload a document to go2UBL for conversion to an UBL.
  */
 const uploadDocument = async ({
-  type, externalId, filename, chamberOfCommerceId, document,
+  type, externalId, filename, chamberOfCommerceId, document, includeLines = false
 }) => {
   const validDocumentTypes = ['sale', 'logistic', 'purchase'];
   if (!validDocumentTypes.includes(type)) {
@@ -203,12 +206,16 @@ const uploadDocument = async ({
   }
 
   let url = `${DOCUMENT_API}/PurchaseStandard/PutDocument`;
+  if (type === 'purchase' && includeLines) {
+    url = `${LINES_API}/PurchaseLines/PutDocument`;
+  }
+
   if (type === 'sale') {
-    url = `${CONVERT_API}/api/v1/SaleStandard/PutDocument`;
+    url = `${CONVERT_API}/SaleStandard/PutDocument`;
   }
 
   if (type === 'logistic') {
-    url = `${LOGISTICS_API}/api/v1/PurchaseLogistic/PutDocument`;
+    url = `${LOGISTICS_API}/PurchaseLogistic/PutDocument`;
   }
 
   return postToGo2Ubl({
