@@ -4,76 +4,77 @@ let COMPANY_API = null;
 let DOCUMENT_API = null;
 let LOGISTICS_API = null;
 let CONVERT_API = null;
+let LINES_API = null;
 
 const credentials = {};
 
 const StatusDetail = {
-  None: 1,
-  ReceivedByMail: 100,
-  ReceivedByWebservice: 110,
-  RecievedByAPP: 120,
-  ReceivedInADifferentWay: 190,
-  ReadyForClassifyDocument: 300,
-  ClassifyingDocument: 310,
-  ReadyForDataEntry: 400,
-  DataEntryProcessing: 430,
-  DataEntryProcessingCheckup: 440,
-  DataEntryProcessingAdvanced: 460,
-  DataEntryProcessingAdvancedCheckup: 470,
-  Approved: 700,
-  ToDeliverChecksApproved: 710,
-  NonUniversalBusinessLanguageDocument: 740,
-  ToDeliverChecksNonUbl: 750,
-  Declined: 780,
-  ToDeliverChecksDeclined: 790,
-  ReadyToSend: 800,
-  Sent: 820,
-  Invoiced: 900,
-  Ready: 1000,
+    None: 1,
+    ReceivedByMail: 100,
+    ReceivedByWebservice: 110,
+    RecievedByAPP: 120,
+    ReceivedInADifferentWay: 190,
+    ReadyForClassifyDocument: 300,
+    ClassifyingDocument: 310,
+    ReadyForDataEntry: 400,
+    DataEntryProcessing: 430,
+    DataEntryProcessingCheckup: 440,
+    DataEntryProcessingAdvanced: 460,
+    DataEntryProcessingAdvancedCheckup: 470,
+    Approved: 700,
+    ToDeliverChecksApproved: 710,
+    NonUniversalBusinessLanguageDocument: 740,
+    ToDeliverChecksNonUbl: 750,
+    Declined: 780,
+    ToDeliverChecksDeclined: 790,
+    ReadyToSend: 800,
+    Sent: 820,
+    Invoiced: 900,
+    Ready: 1000,
 };
 
 const DeclinedReason = {
-  Duplicate: 1,
-  Unqualified: 2,
-  Unreadable: 3,
-  Untrusted: 4,
-  UblInvalid: 5,
-  ImageInvalid: 6,
-  NoProcurementDocument: 10001,
-  MultipleProcurementDocuments: 10002,
-  MatchingKvkNumbers: 10004,
-  UnsupportedWordAndExcelFiles: 10005,
-  InvalidImageAttachment: 10006,
-  NoSaleDocument: 10007,
-  MultipleSaleDocuments: 10008,
+    Duplicate: 1,
+    Unqualified: 2,
+    Unreadable: 3,
+    Untrusted: 4,
+    UblInvalid: 5,
+    ImageInvalid: 6,
+    NoProcurementDocument: 10001,
+    MultipleProcurementDocuments: 10002,
+    MatchingKvkNumbers: 10004,
+    UnsupportedWordAndExcelFiles: 10005,
+    InvalidImageAttachment: 10006,
+    NoSaleDocument: 10007,
+    MultipleSaleDocuments: 10008,
 };
 
 /**
  * @private
  */
 const postToGo2Ubl = async ({ url, data }) => new Promise((resolve, reject) => {
-  request
-    .post(url)
-    .send(data)
-    .set('identifier', credentials.identifier)
-    .set('code', credentials.code)
-    .set('token', credentials.token)
-    .set('Accept', 'application/json')
-    .end((err, res) => {
-      if (err || !res.ok) {
-        reject(err || res.ok);
-      } else {
-        resolve(res.body);
-      }
-    });
+    request
+        .post(url)
+        .send(data)
+        .set('identifier', credentials.identifier)
+        .set('code', credentials.code)
+        .set('token', credentials.token)
+        .set('Accept', 'application/json')
+        .end((err, res) => {
+            if (err || !res.ok) {
+                reject(err || res.ok);
+            } else {
+                resolve(res.body);
+            }
+        });
 });
 
 /**
  * @private
  */
 const standardPost = async (url, data) => postToGo2Ubl({
-  url,
-  data,
+    url,
+    data,
 });
 
 /**
@@ -82,47 +83,49 @@ const standardPost = async (url, data) => postToGo2Ubl({
  * @param {*} credentials
  */
 const initialize = ({
-  companyApi = 'https://secure.go2ubl.nl/api/request',
-  documentApi = 'https://secure.go2ubl.nl/api/v1',
-  logisticsApi = 'https://secure.logistics2ubl.nl',
-  convertApi = 'https://secure.convert2ubl.nl',
-  code,
-  identifier,
-  token,
+    companyApi = 'https://secure.go2ubl.nl/api/request',
+    documentApi = 'https://secure.go2ubl.nl/api/v1',
+    logisticsApi = 'https://secure.logistics2ubl.nl/api/v1',
+    convertApi = 'https://secure.convert2ubl.nl/api/v1',
+    linesApi = 'https://secure.lines2ubl.nl/api/v1',
+    code,
+    identifier,
+    token,
 }) => {
-  COMPANY_API = companyApi;
-  DOCUMENT_API = documentApi;
-  LOGISTICS_API = logisticsApi;
-  CONVERT_API = convertApi;
-  credentials.code = code;
-  credentials.identifier = identifier;
-  credentials.token = token;
+    COMPANY_API = companyApi;
+    DOCUMENT_API = documentApi;
+    LOGISTICS_API = logisticsApi;
+    CONVERT_API = convertApi;
+    LINES_API = linesApi;
+    credentials.code = code;
+    credentials.identifier = identifier;
+    credentials.token = token;
 };
 
 /**
  * Get details about a company using its chamber of commerce identity.
  */
 const getCompany = async (chamberOfCommerceId) => {
-  if (!chamberOfCommerceId) {
-    return { Success: false, message: 'chamber of commerce identity is required.' };
-  }
+    if (!chamberOfCommerceId) {
+        return { Success: false, message: 'chamber of commerce identity is required.' };
+    }
 
-  return postToGo2Ubl({
-    url: `${COMPANY_API}/GetCompanyByKvk`,
-    data: {
-      KvKNumber: chamberOfCommerceId,
-    },
-  });
+    return postToGo2Ubl({
+        url: `${COMPANY_API}/GetCompanyByKvk`,
+        data: {
+            KvKNumber: chamberOfCommerceId,
+        },
+    });
 };
 
 /**
  * Enable an existing company using its chamber of commerce identity.
  */
 const enableCompany = async chamberOfCommerceId => postToGo2Ubl({
-  url: `${COMPANY_API}/EnableCompanyByKvk`,
-  data: {
-    KvKNumber: chamberOfCommerceId,
-  },
+    url: `${COMPANY_API}/EnableCompanyByKvk`,
+    data: {
+        KvKNumber: chamberOfCommerceId,
+    },
 });
 
 /**
@@ -130,30 +133,30 @@ const enableCompany = async chamberOfCommerceId => postToGo2Ubl({
  * whitelist and the default reply email address.
  */
 const addCompany = async (chamberOfCommerceId, initialEmailWhitelist, replyEmailAddress) => {
-  if (!chamberOfCommerceId || !replyEmailAddress) {
-    return false;
-  }
+    if (!chamberOfCommerceId || !replyEmailAddress) {
+        return false;
+    }
 
-  const data = {
-    KvKNumber: chamberOfCommerceId,
-    ValidSenders: initialEmailWhitelist,
-    ReplyAddress: replyEmailAddress,
-  };
+    const data = {
+        KvKNumber: chamberOfCommerceId,
+        ValidSenders: initialEmailWhitelist,
+        ReplyAddress: replyEmailAddress,
+    };
 
-  return postToGo2Ubl({
-    url: `${COMPANY_API}/AddCompanyByKvk`,
-    data,
-  });
+    return postToGo2Ubl({
+        url: `${COMPANY_API}/AddCompanyByKvk`,
+        data,
+    });
 };
 
 /**
  * Disable a new company using its chamber of commerce identity.
  */
 const disableCompany = async chamberOfCommerceId => postToGo2Ubl({
-  url: `${COMPANY_API}/DisableCompanyByKvk`,
-  data: {
-    KvKNumber: chamberOfCommerceId,
-  },
+    url: `${COMPANY_API}/DisableCompanyByKvk`,
+    data: {
+        KvKNumber: chamberOfCommerceId,
+    },
 });
 
 /**
@@ -161,11 +164,11 @@ const disableCompany = async chamberOfCommerceId => postToGo2Ubl({
  * identity and the email address to delete.
  */
 const deleteEmailFromCompanyWhitelist = async (chamberOfCommerceId, emailAddressToDelete) => postToGo2Ubl({
-  url: `${COMPANY_API}/DeleteWhiteListByKvk`,
-  data: {
-    KvKNumber: chamberOfCommerceId,
-    Email: emailAddressToDelete,
-  },
+    url: `${COMPANY_API}/DeleteWhiteListByKvk`,
+    data: {
+        KvKNumber: chamberOfCommerceId,
+        Email: emailAddressToDelete,
+    },
 });
 
 /**
@@ -173,11 +176,11 @@ const deleteEmailFromCompanyWhitelist = async (chamberOfCommerceId, emailAddress
  * identity and the email address to add.
  */
 const addEmailToCompanyWhitelist = async (chamberOfCommerceId, emailAddressToAdd) => postToGo2Ubl({
-  url: `${COMPANY_API}/AddWhiteListByKvk`,
-  data: {
-    KvKNumber: chamberOfCommerceId,
-    Email: emailAddressToAdd,
-  },
+    url: `${COMPANY_API}/AddWhiteListByKvk`,
+    data: {
+        KvKNumber: chamberOfCommerceId,
+        Email: emailAddressToAdd,
+    },
 });
 
 /**
@@ -185,51 +188,55 @@ const addEmailToCompanyWhitelist = async (chamberOfCommerceId, emailAddressToAdd
  * chamber of commerce identity.
  */
 const getCompanyWhitelist = async chamberOfCommerceId => postToGo2Ubl({
-  url: `${COMPANY_API}/GetWhiteListByKvk`,
-  data: {
-    KvKNumber: chamberOfCommerceId,
-  },
+    url: `${COMPANY_API}/GetWhiteListByKvk`,
+    data: {
+        KvKNumber: chamberOfCommerceId,
+    },
 });
 
 /**
  * Upload a document to go2UBL for conversion to an UBL.
  */
 const uploadDocument = async ({
-  type = 'purchase', externalId, filename, chamberOfCommerceId, document,
+    type = 'purchase', externalId, filename, chamberOfCommerceId, document, includeLines = false
 }) => {
-  const validDocumentTypes = ['sale', 'logistic', 'purchase'];
-  if (!validDocumentTypes.includes(type)) {
-    throw new Error(`Invalid type property specified: valid values are ${JSON.stringify(validDocumentTypes)}`);
-  }
+    const validDocumentTypes = ['sale', 'logistic', 'purchase'];
+    if (!validDocumentTypes.includes(type)) {
+        throw new Error(`Invalid type property specified: valid values are ${JSON.stringify(validDocumentTypes)}`);
+    }
 
-  let url = `${DOCUMENT_API}/PurchaseStandard/PutDocument`;
-  if (type === 'sale') {
-    url = `${CONVERT_API}/SaleStandard/PutDocument`;
-  }
+    let url = `${DOCUMENT_API}/PurchaseStandard/PutDocument`;
+    if (type === 'purchase' && includeLines) {
+        url = `${LINES_API}/PurchaseLines/PutDocument`;
+    }
 
-  if (type === 'logistic') {
-    url = `${LOGISTICS_API}/PurchaseLogistic/PutDocument`;
-  }
+    if (type === 'sale') {
+        url = `${CONVERT_API}/SaleStandard/PutDocument`;
+    }
 
-  return postToGo2Ubl({
-    url,
-    data: {
-      KvkNumber: chamberOfCommerceId,
-      ExternalId: externalId,
-      FileName: filename || externalId,
-      Content: document,
-    },
-  });
+    if (type === 'logistic') {
+        url = `${LOGISTICS_API}/PurchaseLogistic/PutDocument`;
+    }
+
+    return postToGo2Ubl({
+        url,
+        data: {
+            KvkNumber: chamberOfCommerceId,
+            ExternalId: externalId,
+            FileName: filename || externalId,
+            Content: document,
+        },
+    });
 };
 
 /**
  * Get the details about a document using its document identity.
  */
 const getDocument = async documentId => postToGo2Ubl({
-  url: `${DOCUMENT_API}/GetDocument`,
-  data: {
-    DocumentGuid: documentId,
-  },
+    url: `${DOCUMENT_API}/GetDocument`,
+    data: {
+        DocumentGuid: documentId,
+    },
 });
 
 /**
@@ -258,21 +265,21 @@ const getReadyDocuments = async () => standardPost(`${DOCUMENT_API}/GetArchivedD
 const getFailedDocuments = async () => standardPost(`${DOCUMENT_API}/GetArchivedDocumentsDeclined`, {});
 
 module.exports = {
-  initialize,
-  getCompany,
-  enableCompany,
-  addCompany,
-  disableCompany,
-  deleteEmailFromCompanyWhitelist,
-  addEmailToCompanyWhitelist,
-  getCompanyWhitelist,
-  uploadDocument,
-  getDocument,
-  getDocumentsWithChangedStatus,
-  getDocumentsStillToBeProcessed,
-  getDocumentsStillToBeDelivered,
-  getReadyDocuments,
-  getFailedDocuments,
-  StatusDetail,
-  DeclinedReason,
+    initialize,
+    getCompany,
+    enableCompany,
+    addCompany,
+    disableCompany,
+    deleteEmailFromCompanyWhitelist,
+    addEmailToCompanyWhitelist,
+    getCompanyWhitelist,
+    uploadDocument,
+    getDocument,
+    getDocumentsWithChangedStatus,
+    getDocumentsStillToBeProcessed,
+    getDocumentsStillToBeDelivered,
+    getReadyDocuments,
+    getFailedDocuments,
+    StatusDetail,
+    DeclinedReason,
 };
