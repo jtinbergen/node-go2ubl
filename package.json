@@ -1,19 +1,23 @@
 {
     "name": "node-go2ubl",
-    "version": "1.2.1",
+    "version": "1.2.0",
     "main": "index.js",
     "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jtinbergen/node-servoy"
+    },
     "devDependencies": {
-        "ajv": "^6.0.0",
-        "eslint": "^4.9.0",
-        "eslint-config-airbnb-base": "^12.1.0",
-        "eslint-plugin-import": "^2.7.0",
-        "eslint-config-airbnb": "^16.1.0",
-        "eslint-plugin-jsx-a11y": "^6.0.3",
-        "eslint-plugin-react": "^7.7.0"
+        "ajv": "^6.10.0",
+        "eslint": "^6.0.1",
+        "eslint-config-airbnb-base": "^13.2.0",
+        "eslint-plugin-import": "^2.18.0",
+        "eslint-config-airbnb": "^17.1.1",
+        "eslint-plugin-jsx-a11y": "^6.2.3",
+        "eslint-plugin-react": "^7.14.2"
     },
     "dependencies": {
-        "superagent": "^3.5.2",
-        "uuid": "^3.0.1"
+        "superagent": "^5.1.0",
+        "uuid": "^3.3.2"
     }
 }
