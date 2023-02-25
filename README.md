@@ -2,18 +2,18 @@
 
 #### Node library to use the go2UBL API. Allows you to:
 
-* Send purchase and sale invoices and logistic documents to go2UBL for conversion to UBL format
-* Track a sent document's status during its conversion lifecycle
-* Retrieve all document metadata created during the conversion lifecycle
+- Send purchase and sale invoices and logistic documents to go2UBL for conversion to UBL format
+- Track a sent document's status during its conversion lifecycle
+- Retrieve all document metadata created during the conversion lifecycle
 
 #### As well as:
 
-* Add companies to your account
-* Enable companies in your account
-* Disable companies in your account
-* Get a company's whitelist with accepted email addresses
-* Add an email address to a company's whitelist
-* Remove an email address from a company's whitelist
+- Add companies to your account
+- Enable companies in your account
+- Disable companies in your account
+- Get a company's whitelist with accepted email addresses
+- Add an email address to a company's whitelist
+- Remove an email address from a company's whitelist
 
 ## Please note
 
@@ -27,11 +27,11 @@ npm install node-go2ubl --save
 
 ## Before you can call the go2UBL API
 
-You will need to aquire your API credentials from go2UBL. You can do so by contacting them using the following URL: 
+You will need to aquire your API credentials from go2UBL. You can do so by contacting them using the following URL:
 
 [https://www.go2ubl.nl/api](https://www.go2ubl.nl/api)
 
- After this you can initialize the library as follows:
+After this you can initialize the library as follows:
 
 ```
 const go2UBL = require('node-go2ubl');
@@ -97,7 +97,7 @@ console.log(await go2UBL.deleteEmailFromCompanyWhitelist(chamberOfCommerce, 'pos
 
 MIT License
 
-Copyright (c) 2019 Jaapjan Tinbergen
+Copyright (c) 2023 Jaapjan Tinbergen
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
